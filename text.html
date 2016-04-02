@@ -1,0 +1,174 @@
+
+<!doctype html>
+<html lang="en" class="mainPage">
+<head>
+<style>
+    #logoImage{
+        height: 25px;
+        width: 125px;
+    }
+</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1">-->
+<title>hw8 Exercise</title>
+<!-- import resources -->
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">   
+<script   src="https://code.jquery.com/jquery-1.12.2.min.js"   integrity="sha256-lZFHibXzMHo3GGeehn1hudTAP3Sc0uKXBXAzHX1sjtk="   crossorigin="anonymous"></script>
+    
+ <script   src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"   integrity="sha256-xNjb53/rY+WmG+4L6tTl9m6PpqknWZvRt0rO1SRnJzw="   crossorigin="anonymous"></script>
+    
+     <script   src="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"   integrity="sha256-xNjb53/rY+WmG+4L6tTl9m6PpqknWZvRt0rO1SRnJzw="   crossorigin="anonymous"></script>
+    
+
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<!-- Latest compiled JavaScript -->
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+ <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+        <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+   
+    
+
+</head>
+<body>
+<!-- the whole div-->   
+<div class="container">
+    <!-- the form div-->   
+    <div>
+       <form class="form-horizontal" role="form" action= "" method="GET">
+            <h1>Stock Market Search</h1>
+         <div class = "row">
+            
+            <div class="col-sm-3">
+            <label class="control-label" for="stockInput">Enter the stock name or symbol:<span style="color:red">*</span></label>
+            </div>
+            
+            <div class="col-sm-4">
+             <input type="text" class="form-control"  name="inputText" placeholder="Apple Inc or AAPL" id="stockInput" required>
+            </div>
+            
+            <div class="col-sm-5">
+                <button type="button" name = "submit" value="Search" class="btn btn-primary"><span class="glyphicon glyphicon-search" onclick="clickToQuote(this.form)"></span>Get Quote </button>
+                <button type="button" class="btn btn-default" onclick ="clearResult()"><span class=" glyphicon glyphicon-refresh"></span>Clear</button>
+            </div>
+            
+        </div>
+         <!-- second row include validatinformation plus Markit on Demand logo-->  
+        <div class = "row">
+            <!-- this will be set for output validation information, first is null-->
+            <div class="col-sm-4 col-sm-offset-3" id="validationInformation"></div>
+            <div class="col-sm-5">
+                <label for="logo">Powered by:</label><a id="logoLink" href="http://dev.markitondemand.com/MODApis/"><img id="logoImage" alt="Markit on Demand logo" src="mod-logo.png" ></a>
+            </div>
+        </div><!--for row-->  
+     </form>
+    </div> <!--upper part-->
+    <hr id="lineHR">
+    <!-- below is the second part of first figure, result show in carousel still need to figure out how to solve this part--> 
+    <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+        <!-- Wrapper for slide>-->
+        <div class="carousel-inner" role="listbox">
+            <div class="item active">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                          <label>Favorite List:</label>
+                           <div class="pull-right">
+                            Automatic Refresh:<input type="checkbox" data-toggle="toggle">
+                            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span></button>
+                            <button type="submit" class="btn btn-default" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></button>
+                          </div>
+                    </div>
+                    <div class="panel-body">
+                                     <table class="table table-striped">
+                                        <tr>
+                                            <th>Symbol</th>
+                                            <th>Company Name</th>
+                                            <th>Stock Price</th>
+                                            <th>Change (Change Percent)</th>
+                                            <th>Market Cap</th>
+                                            <th></th>
+                                        </tr>
+                                    </table>
+                                </div>
+                </div>
+
+            </div>
+        
+        </div>
+    
+    </div>
+
+</div> <!--the whole include the upper part and the second part-->
+<script>
+    function clearResult(){
+            document.location.href = "hw8Stock.html";
+    }
+</script>
+<!-- get quote return-->
+<script>
+    function clickToQuote(myform){
+        var textVal = myform.inputText.value;//get the symbol.
+        // first to check the input
+        // require will test the input is empty or not. 
+        // next need to check if the symbol has result
+        alert(textVal);
+        $.ajax({
+            url: "hw8Quote.php",
+            data: { input: textVal},
+            type: "GET",
+            datatype: "json",
+            success: function( result ) {
+                alert(result);
+               var jsonObject = jQuery.parseJSON(result); 
+                
+                            if(jsonObject.length==0) {
+                                alert("no object");
+                                //document.getElementById("validationInformation").innerHTML = "Select a valid entry";
+                            }
+                
+            }
+            
+        })
+    
+    }
+</script>
+    <!--problem-->
+     <!-- autocomplete -->
+         <script>
+            $( "#stockInput" ).autocomplete({
+                
+                //source: JSON data retrieved from server
+                source: function( request, response ) {
+                    $.ajax({
+                        url: "hw8Stock.php",
+                        data: { input: request.term},
+                        type: "GET",
+                        datatype: "json",
+                        success: function( result ) {
+                            var jsonObject = jQuery.parseJSON(result);
+                            
+                            if(jsonObject.length==0) {
+                                document.getElementById("validationInformation").innerHTML = "Select a valid entry";
+                                response(null);
+
+                            }
+                            else {
+                                document.getElementById("validationInformation").innerHTML = "";
+
+                                var data = new Array();
+
+                                for(var i=0; i<jsonObject.length; i++) {
+                                    data[i] = { label: jsonObject[i].Symbol + " - " + jsonObject[i].Name + " ( " + jsonObject[i].Exchange + " ) ", value: jsonObject[i].Symbol};
+                                }
+                                response( data );
+
+                            }                                
+                        }
+                    });
+                }
+            });
+        </script>
+
+</body>
+</html>
