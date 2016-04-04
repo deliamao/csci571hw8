@@ -7,35 +7,43 @@
         height: 25px;
         width: 125px;
     }
+    <style>
+        i.green:before {
+            color: green;
+        }
+        i.red:before {
+            color: red;
+        }
+    </style>
 </style>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
 <!-- <meta name="viewport" content="width=device-width, initial-scale=1">-->
 <title>hw8 Exercise</title>
 <!-- import resources -->
 <script src="moment.js"></script>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">   
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script   src="https://code.jquery.com/jquery-1.12.2.min.js"   integrity="sha256-lZFHibXzMHo3GGeehn1hudTAP3Sc0uKXBXAzHX1sjtk="   crossorigin="anonymous"></script>
-    
+
  <script   src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"   integrity="sha256-xNjb53/rY+WmG+4L6tTl9m6PpqknWZvRt0rO1SRnJzw="   crossorigin="anonymous"></script>
-    
+
      <script   src="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"   integrity="sha256-xNjb53/rY+WmG+4L6tTl9m6PpqknWZvRt0rO1SRnJzw="   crossorigin="anonymous"></script>
-    
+
 
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <!-- Latest compiled JavaScript -->
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
  <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
         <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-   
-    
+
+
 
 </head>
 <body>
-    
+
 <!--set up the facebook SDK -->
-<!--   
+<!--
 <script>
   window.fbAsyncInit = function() {
     FB.init({
@@ -53,42 +61,42 @@
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
 </script>
- -->   
-    
-<!-- the whole div-->   
+ -->
+
+<!-- the whole div-->
 <div class="container">
-    <!-- the form div-->   
+    <!-- the form div-->
     <div>
        <form class="form-horizontal" role="form" action= "" method="GET">
             <h1>Stock Market Search</h1>
          <div class = "row">
-            
+
             <div class="col-sm-3">
             <label class="control-label" for="stockInput">Enter the stock name or symbol:<span style="color:red">*</span></label>
             </div>
-            
+
             <div class="col-sm-4">
              <input type="text" class="form-control"  name="inputText" placeholder="Apple Inc or AAPL" id="stockInput" required>
             </div>
-            
+
             <div class="col-sm-5">
                 <button type="button" class="btn btn-primary" id= "quoteButton"><span class="glyphicon glyphicon-search"></span>Get Quote </button>
                 <button type="button" class="btn btn-default" onclick ="clearResult()"><span class=" glyphicon glyphicon-refresh"></span>Clear</button>
             </div>
-            
+
         </div>
-         <!-- second row include validatinformation plus Markit on Demand logo-->  
+         <!-- second row include validatinformation plus Markit on Demand logo-->
         <div class = "row">
             <!-- this will be set for output validation information, first is null-->
             <div class="col-sm-4 col-sm-offset-3" id="validationInformation"></div>
             <div class="col-sm-5">
                 <label for="logo">Powered by:</label><a id="logoLink" href="http://dev.markitondemand.com/MODApis/"><img id="logoImage" alt="Markit on Demand logo" src="mod-logo.png" ></a>
             </div>
-        </div><!--for row-->  
+        </div><!--for row-->
      </form>
     </div> <!--upper part-->
     <hr id="lineHR">
-    <!-- below is the second part of first figure, result show in carousel still need to figure out how to solve this part--> 
+    <!-- below is the second part of first figure, result show in carousel still need to figure out how to solve this part-->
     <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
         <!-- Wrapper for slide>-->
         <div class="carousel-inner" role="listbox">
@@ -98,23 +106,24 @@
                     <div class="panel-heading">
                           <label>Favorite List:</label>
                            <div class="pull-right">
-                            Automatic Refresh:<input type="checkbox" data-toggle="toggle">
-                            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span></button>
+                            Automatic Refresh:<input id="autoRefreshButton" type="checkbox" data-toggle="toggle">
+                            <button id ="refreshButton" type="submit" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span></button>
                             <!--below need to modify-->
                             <button type="submit" class="btn btn-default" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></button>
                           </div>
                     </div>
                     <div class="panel-body">
-                                     <table id="favoriteTable" class="table table-striped">
-                                        <tr>
-                                            <th>Symbol</th>
-                                            <th>Company Name</th>
-                                            <th>Stock Price</th>
-                                            <th>Change (Change Percent)</th>
-                                            <th>Market Cap</th>
-                                            <th>      </th>
-                                        </tr>
-                                    </table>
+                         <table id="favoriteTable" class="table table-striped">
+                           <thead>
+                            <tr>
+                              <th>Symbol</th>
+                              <th>Company Name</th>
+                              <th>Stock Price</th>
+                              <th>Change (Change Percent)</th>
+                              <th>Market Cap</th>
+                            </tr>
+                          </thead>
+                        </table>
                     </div>
                 </div>
             </div><!--end of favorite section-->
@@ -124,7 +133,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                     <!-- stock detail panel heading include left button and stock detail text-->
-                         <button id="pevious" type="button" class="btn btn-default" onclick = "GoPreSlide()"> <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></button> 
+                         <button id="pevious" type="button" class="btn btn-default" onclick = "refreshFavoritePannel()"> <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></button>
                          <span>Stock Details</span>
                         </div>
                         <div class="panel-body">
@@ -137,7 +146,7 @@
                              </ul>
                              <hr>
                             </div>
-                            
+
                             <div id="tagDetail">
                                 <div class="tab-content">
                                     <div id="currentStock" class="tab-pane fade in active">
@@ -147,18 +156,16 @@
                                                 <span>Stock Details</span>
                                             </div>
                                             <div class="col-sm-2 col-sm-offset-3">
-                                                <button id="fbButton" type="button" class="btn btn-primary" onclick="ShowFacebook()">FaceBook
-                                                </button>
-                                                <button type="button" class="btn btn-default" onclick="addToFavorite()">
-                                                <span id="favouriteStar" class="glyphicon glyphicon-star-empty"></span>
+                                                <button id="fbButton" type="button" class="btn btn-primary" onclick="ShowFacebook()">FaceBook</button>
+                                                <button type="button" class="btn btn-default" id="favouriteButton">
+                                                <span id="favouriteStar" class="glyphicon glyphicon-star-empty" style="font-size:20px"></span>
                                                 </button>
                                             </div>
                                         </div>
                                         <div class="row">
                                           <div id="stockDetailSection" class="col-sm-6">
                                            <!--stock detail table-->
-                                                
-        
+
                                             </div>
                                             <!--stock chart-->
                                                  <div  id="stockChart" class="col-sm-6">
@@ -167,41 +174,41 @@
                                         </div>
 
                                      </div>
-                                    
+
                                      <div id="HistoricalCharts" class="tab-pane fade">
                                          <!--will append HistoricalCharts by jquery-->
-                                         
+
                                      </div>
-                                    
+
                                     <div id="newsFeeds" class="tab-pane fade">
                                          <!--will append newsFeeds by jquery-->
-                                        
-                                         
+
+
                                     </div>
                                 </div>
-                            
+
                             </div>
                         </div>
 
-                    
+
                     </div>
                 </div>
-            
-            
+
+
             </div>
-        
+
         </div><!-- end of carousel-inner - all- slide section-->
-    
+
     </div>
 
 </div> <!--the whole include the upper part and the second part-->
-    
+
 <!---All the script will be write down in below-->
 <!--
 <script>
     //facebook button take action
     function ShowFacebook(){
-        // need some global variable to store some object at least the symbol we are now 
+        // need some global variable to store some object at least the symbol we are now
     //var curr_stock_json;
    // var curr_json_imgURL;
         var json = curr_stock_json;
@@ -209,9 +216,9 @@
         var title = "Current Stock Price of "+ json["Name"]+ " is $" + json["LastPrice"];
         var subhead = "Stock Information of "+json["Name"]+ " ("+json["Symbol"]+")";
         var footText ="LAST PRICE: $"+json["LastPrice"]+", CHANGE: "+json["Change"].toFixed(2)+" ("+json["ChangePercent"].toFixed(2)+"%)";
-        // post 
+        // post
         // may need to check login API first
-        FB.ui(  
+        FB.ui(
                     {
                         method: "feed",
                         link: "http://dev.markitondemand.com/",
@@ -220,7 +227,7 @@
                         description: subhead,
                         caption: footText
                     },
-                    //callback to check whether post sucessfully 
+                    //callback to check whether post sucessfully
                     function(response){
                         if (response && !response.error_message) {
                           alert('Posted sucessfully');
@@ -229,58 +236,161 @@
                         }
                     }
                 );
-    
     }
-    
-</script>    
-    -->
-    
-<!--below section is to handle the favorite problem-->
+
+<!---below section is to handle the favorite problem-->
 <script>
-    // bug
-    function changeStar(){
-        $("#favouriteStar").css("color","yellow");
+    // This object is used to store current favourite list.
+    var favouriteList =  Object.create(null);
+
+    $("#favouriteButton").click(function(e) {
+      e.preventDefault();
+      if (curr_stock_json == null) {
+        console.log("current stock is null.");
+        return;
+      }
+      var stockSymbol = curr_stock_json.Symbol;
+      console.log("stock symbol:" + stockSymbol);
+      if (favouriteList == null || !(stockSymbol in favouriteList)) {
+        favouriteList[stockSymbol] = true;
+        updateStarSpan(stockSymbol);
+        console.log("favouriteList");
+        console.log(favouriteList);
+      } else {
+        delete favouriteList[stockSymbol];
+        updateStarSpan(stockSymbol);
+        console.log("favouriteList");
+        console.log(favouriteList);
+      }
+    });
+    function updateStarSpan(symble){
+      console.log("updateStarSpan");
+      console.log(favouriteList);
+      console.log(symble);
+      if (!(symble in favouriteList)) {
+        console.log("changeStar remove");
+        $("#favouriteStar").removeClass("glyphicon glyphicon-star").addClass("glyphicon glyphicon-star-empty");
+        $("#favouriteStar").css("color", "black");
+      } else {
+        console.log("changeStar add");
+        $("#favouriteStar").removeClass("glyphicon glyphicon-star-empty").addClass("glyphicon glyphicon-star");
+        $("#favouriteStar").css("color", "yellow");
+      }
     }
-    function addToFavorite(){
-        // get the current jason obect ,then add to the favorite table
-        var json = curr_stock_json;
-        var content;
-        if(json != null){
-            alert(json);
-            // add to the favorite table
-            ChangeStar();
-            // create row
-            content = "<tr>";
-            content + = "<td>" + json.Symbol + "</td>";
-            content + = "<td>" + json.Name + "</td>";
-            content + = "<td>" + json.LastPrice + "</td>";
-            var change = json.Change.toFixed(2);
-            var changePercent = json.ChangePercent.toFixed(2);
-            content + = "<td>" + json.Symbol + "</td>";
-            content += "<td>"+change+" ( "+changePercent +"%"+" ) "+"</td>";
-            var marketCap = json["MarketCap"]/1000000000;
-            content += "<td>"+marketCap.toFixed(2)+" Billion"+"</td>";
-            // create delete button 
-            var trashButton = "<button type=\"button\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-trash\"></span></button>";
-            content += "<td>"+trashButton+"</td>"; 
-            content += "</tr>";
-            $("#favoriteTable").append(content);
+    function refreshFavoritePannel(){
+        console.log("refreshFavoritePannel");
+        console.log(favouriteList);
+        var favouriteStockData = new Array();
+        for (stock in favouriteList) {
+          console.log("stock");
+          console.log(stock);
+          $.ajax({
+              url: "hw8Stock.php",
+              data: { symbolVal: stock },
+              async: false,
+              type: "GET",
+              datatype: "json",
+              success: function(result) {
+              console.log("refreshFavoritePannel ajax");
+              console.log(result);
+              if (!result || result.Message){
+                    console.log(result);
+                    return;
+              }
+               var jsonObject = jQuery.parseJSON(result);
+               console.log(stock);
+                if(jsonObject["Status"]=="SUCCESS"){
+                  favouriteStockData.push(jsonObject);
+                  console.log("refreshFavoritePannel add favouriteStockData");
+                  console.log(favouriteStockData);
+                  console.log(jsonObject);
+                }
+              }
+            });
         }
-        
+        console.log("refreshFavoritePannel favouriteStockData");
+        console.log(favouriteStockData);
+        if (favouriteStockData.length != 0) {
+          $("#favoriteTable > tbody").remove();
+          var tbody ="<tbody>";
+          tbody += "</tbody>"
+          for (var i = 0; i < favouriteStockData.length; i++) {
+            var s = favouriteStockData[i];
+            console.log("favouriteStockData each stock");
+            console.log(s);
+            var row = "<tr>";
+            row = "<tr>";
+            row += "<td>" + s.Symbol + "</td>";
+            row += "<td>" + s.Name + "</td>";
+            row += "<td>" + s.LastPrice + "</td>";
+            var changeSymble;
+            if (s.Change > 0) {
+              changeSymble = "<span class=\"glyphicon glyphicon-arrow-up></span>";
+            } else if (s.Change <0) {
+              changeSymble = "<span class=\"glyphicon glyphicon-arrow-down></span>";
+            }
+            row += "<td>" + s.Change.toFixed(2) + " ( " + s.ChangePercent.toFixed(2) + "%" + " ) " + changeSymble + "</td>";
+            var marketCap = s.MarketCap / 1000000000;
+            row += "<td>"+marketCap.toFixed(2)+" Billion"+"</td>";
+            // create delete button
+            var trashButton = "<button type=\"button\" class=\"btn btn-default\" onclick=\"deleteFavouriteRow(this, \'"+ s.Symbol + "\');\"><span class=\"glyphicon glyphicon-trash\"></span></button>";
+            //var trashButton = "<button type=\"button\" class=\"btn btn-default\" onclick=\"deleteFavouriteRow(this);\"><span class=\"glyphicon glyphicon-trash\" ></span></button>";
+            row += "<td>"+trashButton+"</td>";
+            row += "</tr>";
+            console.log(row);
+            tbody += row;
+          }
+          $("#favoriteTable").append(tbody);
+        }
     }
+
+    // The following code handles auto refresh favourite pannel.
+    // Use this as global var so to so that the auto refresh can be turn off.
+    var autoRefreshFavouriteId;
+    $("#autoRefreshButton").change(function() {
+      console.log("autoRefreshButton");
+      console.log($("#autoRefreshButton").prop('checked'));
+      if ($("#autoRefreshButton").prop('checked')) {
+        console.log("autorefesh favourite pannel on. set to 30s");
+        autoRefreshFavouriteId = setInterval(function() {
+            console.log("autoRefresh...");
+            refreshFavoritePannel();
+       }, 5000);
+      } else {
+        console.log("autorefesh favourite pannel off.");
+        clearInterval(autoRefreshFavouriteId);
+      }
+    });
+
+    // The following handles refresh button.
+    $("#refreshButton").click(function(e) {
+      console.log("refreshButton click.");
+      refreshFavoritePannel();
+    });
+
+    // The following handles delete button.
+    function deleteFavouriteRow(deleteButton, stockSymbol) {
+      console.log("deleteFavouriteRow");
+      if (typeof(deleteButton) == "object") {
+        $(deleteButton).closest("tr").remove();
+        delete favouriteList[stockSymbol];
+      }
+      console.log(favouriteList);
+    }
+
 </script>
-<!--quote section-->    
+<!--quote section-->
 <script>
     //define two global object for call the facebook API
-    // one global for recore currend jason object one for 
+    // one global for recore currend jason object one for
     // one for the picuture UIL
     var curr_stock_json;
     var curr_json_imgURL;
-    
+
     /*function clickToQuote(myform){
         var textVal = myform.inputText.value;//get the symbol.
         // first to check the input
-        // require will test the input is empty or not. 
+        // require will test the input is empty or not.
         // next need to check if the symbol has result
         alert(textVal);
         $.ajax({
@@ -294,7 +404,7 @@
       e.preventDefault();
       var symbol = $("#stockInput").val();
 
-    // get the detail 
+    // get the detail
       $.ajax({
           url: "hw8Stock.php",
           data: { symbolVal: symbol },
@@ -303,43 +413,43 @@
           datatype: "json",
           success: function(result) {
           if (!result || result.Message){
+            curr_stock_json = null;
                 alert("Error!");
                 return;
             }
-               var jsonObject = jQuery.parseJSON(result);
-               curr_stock_json= jsonObject;// for generate facebook feed;
-                           /* if(jsonObject["Message"] == "No symbol matches found for AAPLE. Try another symbol such as MSFT or AAPL, or use the Lookup API.") {
-                                // below should be do something when type aaple no symobl
-                                alert("no object");
-                                document.getElementById("validationInformation").innerHTML = "Select a valid entry";
-                            }else{
-                                // if we have return we need to create table but status can be success or fail need to kill this problem first
-                                //*/
-                                if(jsonObject["Status"]=="SUCCESS"){
-                                    // we need to create a table use JQUERY
-                                    //$("stockDetailTable").append("<table id=\"detailTable\" class=\"table table-striped table-responsive\">")
-                                    $("#stockDetailSection").append("<table class=\"table table-striped table-responsive\" id=\"stockDetailTable\"></table>");
-                                    $("#stockDetailTable").append("<tr><td><p>Name</p></td><td>" + jsonObject.Name + "</td></tr>");
-                                    $("#stockDetailTable").append("<tr><td><p>Last Price</p></td><td>" + jsonObject.LastPrice + "</td></tr>");
-                                    $("#stockDetailTable").append("<tr><td><p>Change (Change Percent)</p></td><td>" + jsonObject.ChangePercent + "</td></tr>");
-                                    $("#stockDetailTable").append("<tr><td><p>Time and Date</p></td><td>" + jsonObject.Timestamp + "</td></tr>");
-                                    $("#stockDetailTable").append("<tr><td><p>Market Cap</p></td><td>" + jsonObject.MarketCap + "</td></tr>");
-                                    $("#stockDetailTable").append("<tr><td><p>Volume</p></td><td>" + jsonObject.Volume + "</td></tr>");
-                                    $("#stockDetailTable").append("<tr><td><p>Change YTD (Change Percent YTD)</p></td><td>" + jsonObject.ChangePercentYTD + "</td></tr>");
-                                   $("#stockDetailTable").append("<tr><td><p>Low Price</p></td><td>" + jsonObject.High + "</td></tr>");
-                                  $("#stockDetailTable").append("<tr><td><p>High Price</p></td><td>" + jsonObject.Low + "</td></tr>");
-                                   $("#stockDetailTable").append("<tr><td><p>Opening Price</p></td><td>" + jsonObject.Open + "</td></tr>");
-                                    //below handle chart part
-                                   //$("stockDetailTable").append("</table>");
-                                    var stockImgURL = "http://chart.finance.yahoo.com/t?s=" + jsonObject["Symbol"]+ "&lang=en-US&width=550&height=450";
-                                   $("#stockChart").append("<img id=\"dailyStockChart\" class=\"img-responsive\" src=\"" + stockImgURL + "\" alt=\"daily stock chart\">");
-                                    // prepare the curr URL for facebook;
-                                   curr_json_imgURL = "http://chart.finance.yahoo.com/t?s=" + jsonObj["Symbol"]+ "&lang=en-US&width=250&height=250";
-                                   }
-                             }
+           var jsonObject = jQuery.parseJSON(result);
+           curr_stock_json= jsonObject;// for generate facebook feed;
+
+            if(jsonObject["Status"]=="SUCCESS"){
+                // we need to create a table use JQUERY
+                //$("stockDetailTable").append("<table id=\"detailTable\" class=\"table table-striped table-responsive\">")
+                $("#stockDetailSection").empty();
+                $("#stockDetailSection").append("<table class=\"table table-striped table-responsive\" id=\"stockDetailTable\"></table>");
+                $("#stockDetailTable").append("<tr><td><p>Name</p></td><td>" + curr_stock_json.Name + "</td></tr>");
+                $("#stockDetailTable").append("<tr><td><p>Last Price</p></td><td>" + curr_stock_json.LastPrice + "</td></tr>");
+                $("#stockDetailTable").append("<tr><td><p>Change (Change Percent)</p></td><td>" + curr_stock_json.ChangePercent + "</td></tr>");
+                $("#stockDetailTable").append("<tr><td><p>Time and Date</p></td><td>" + curr_stock_json.Timestamp + "</td></tr>");
+                $("#stockDetailTable").append("<tr><td><p>Market Cap</p></td><td>" + curr_stock_json.MarketCap + "</td></tr>");
+                $("#stockDetailTable").append("<tr><td><p>Volume</p></td><td>" + curr_stock_json.Volume + "</td></tr>");
+                $("#stockDetailTable").append("<tr><td><p>Change YTD (Change Percent YTD)</p></td><td>" + curr_stock_json.ChangePercentYTD + "</td></tr>");
+                $("#stockDetailTable").append("<tr><td><p>Low Price</p></td><td>" + curr_stock_json.High + "</td></tr>");
+                $("#stockDetailTable").append("<tr><td><p>High Price</p></td><td>" + curr_stock_json.Low + "</td></tr>");
+                $("#stockDetailTable").append("<tr><td><p>Opening Price</p></td><td>" + curr_stock_json.Open + "</td></tr>");
+                //below handle chart part
+               //$("stockDetailTable").append("</table>");
+                var stockImgURL = "http://chart.finance.yahoo.com/t?s=" + curr_stock_json["Symbol"]+ "&lang=en-US&width=550&height=450";
+                $("#stockChart").empty();
+               $("#stockChart").append("<img id=\"dailyStockChart\" class=\"img-responsive\" src=\"" + stockImgURL + "\" alt=\"daily stock chart\">");
+                // prepare the curr URL for facebook;
+               curr_json_imgURL = "http://chart.finance.yahoo.com/t?s=" + curr_stock_json["Symbol"]+ "&lang=en-US&width=250&height=250";
+               console.log("curr_stock_json");
+               console.log(curr_stock_json);
+               updateStarSpan(curr_stock_json.Symbol);
+            }
+         }
         });
-    // below handle the new feed section 
-        
+    // below handle the new feed section
+
     // below is used for create HighStock chart
         //first use interact chart API
      $.ajax({
@@ -353,9 +463,9 @@
               var jsonObject = jQuery.parseJSON(result);
               render(jsonObject);
           }
-        
+
      });
-     
+
      // PHP call bing  to creat the new feed:
        $.ajax({
                  url: "hw8Stock.php",
@@ -368,7 +478,7 @@
                    //newsDisplay(jsonObject);
                     // create the feed data
                      // the count of the news
-                     
+
                      var newsCount = jsonObject.d.results.length;
                      for(var i=0; i<newsCount; i++){
                          var singleNews = jsonObject.d.results[i];
@@ -380,21 +490,24 @@
                           newsContent += "<p class=\"newsDate\">" + "Date: "+date + "</p>";
                           newsContent += "</div>";
                           $("#newsFeeds").append(newsContent);
-                        
-                     } 
+
+                     }
                   }
               });
  });
-    
-    
+ function resetStockPannel() {
+
+ }
+
+
 </script>
 
-    
+
 <!--below handle chart part-->
 <!-- highstock -->
 <script src="https://code.highcharts.com/stock/highstock.js"></script>
 <script>
-    // _fixData function changee the data in numbers 
+    // _fixData function changee the data in numbers
             function _fixDate(dateIn) {
                 var dat = new Date(dateIn); // create data object
                 return Date.UTC(dat.getFullYear(), dat.getMonth(), dat.getDate());
@@ -464,7 +577,7 @@
                             type: 'all',
                             text: 'All'
                         }]
-                    },// use the range selector to defind the botton 
+                    },// use the range selector to defind the botton
                     title: {
                         text: symbol + ' Stock Value'
                     },
@@ -482,7 +595,7 @@
                         lineWidth: 2
                     }*/
                            ],
-                    
+
                     series: [{
                         type: 'area',
                         name: symbol,
@@ -497,7 +610,7 @@
                 });
             };
         </script>
-    
+
 <!-- clear function-->
 <script>
     function clearResult(){
@@ -508,7 +621,7 @@
      <!-- autocomplete -->
          <script>
             $( "#stockInput" ).autocomplete({
-                
+
                 //source: JSON data retrieved from server
                 source: function( request, response ) {
                     $.ajax({
@@ -518,7 +631,7 @@
                         datatype: "json",
                         success: function( result ) {
                             var jsonObject = jQuery.parseJSON(result);
-                            
+
                             if(jsonObject.length==0) {
                                 document.getElementById("validationInformation").innerHTML = "Select a valid entry";
                                 response(null);
@@ -534,7 +647,7 @@
                                 }
                                 response( data );
 
-                            }                                
+                            }
                         }
                     });
                 }
