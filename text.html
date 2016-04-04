@@ -33,6 +33,28 @@
 
 </head>
 <body>
+    
+<!--set up the facebook SDK -->
+<!--   
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '1701228993472812',// application ID is not set up
+      xfbml      : true,
+      version    : 'v2.5'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+ -->   
+    
 <!-- the whole div-->   
 <div class="container">
     <!-- the form div-->   
@@ -83,14 +105,14 @@
                           </div>
                     </div>
                     <div class="panel-body">
-                                     <table class="table table-striped">
+                                     <table id="favoriteTable" class="table table-striped">
                                         <tr>
                                             <th>Symbol</th>
                                             <th>Company Name</th>
                                             <th>Stock Price</th>
                                             <th>Change (Change Percent)</th>
                                             <th>Market Cap</th>
-                                            <th></th>
+                                            <th>      </th>
                                         </tr>
                                     </table>
                     </div>
@@ -125,26 +147,25 @@
                                                 <span>Stock Details</span>
                                             </div>
                                             <div class="col-sm-2 col-sm-offset-3">
-                                                <button id="fbimg" type="button" class="btn btn-primary">F
+                                                <button id="fbButton" type="button" class="btn btn-primary" onclick="ShowFacebook()">FaceBook
                                                 </button>
-                                                <button type="button" class="btn btn-default">
-                                                <span id="favouriteStar" class="glyphicon glyphicon-star"></span>
+                                                <button type="button" class="btn btn-default" onclick="addToFavorite()">
+                                                <span id="favouriteStar" class="glyphicon glyphicon-star-empty"></span>
                                                 </button>
                                             </div>
                                         </div>
-                                        <div id="stockDetailSection" class ="row">
+                                        <div class="row">
+                                          <div id="stockDetailSection" class="col-sm-6">
                                            <!--stock detail table-->
-                                                <div  class="col-sm-6">
-                                                    <table class="table table-striped table-responsive" id="stockDetailTable">
-                                                    
-                                                    </table>
-                                                </div>
+                                                
+        
+                                            </div>
                                             <!--stock chart-->
                                                  <div  id="stockChart" class="col-sm-6">
                                                     <!--will append image by jquery-->
                                                 </div>
                                         </div>
-                                
+
                                      </div>
                                     
                                      <div id="HistoricalCharts" class="tab-pane fade">
@@ -176,8 +197,86 @@
 </div> <!--the whole include the upper part and the second part-->
     
 <!---All the script will be write down in below-->
-    
+<!--
 <script>
+    //facebook button take action
+    function ShowFacebook(){
+        // need some global variable to store some object at least the symbol we are now 
+    //var curr_stock_json;
+   // var curr_json_imgURL;
+        var json = curr_stock_json;
+        var stockImg = curr_json_imgURL;
+        var title = "Current Stock Price of "+ json["Name"]+ " is $" + json["LastPrice"];
+        var subhead = "Stock Information of "+json["Name"]+ " ("+json["Symbol"]+")";
+        var footText ="LAST PRICE: $"+json["LastPrice"]+", CHANGE: "+json["Change"].toFixed(2)+" ("+json["ChangePercent"].toFixed(2)+"%)";
+        // post 
+        // may need to check login API first
+        FB.ui(  
+                    {
+                        method: "feed",
+                        link: "http://dev.markitondemand.com/",
+                        picture: stockImg,
+                        name: title,
+                        description: subhead,
+                        caption: footText
+                    },
+                    //callback to check whether post sucessfully 
+                    function(response){
+                        if (response && !response.error_message) {
+                          alert('Posted sucessfully');
+                        } else {
+                          alert('No Posted');
+                        }
+                    }
+                );
+    
+    }
+    
+</script>    
+    -->
+    
+<!--below section is to handle the favorite problem-->
+<script>
+    // bug
+    function changeStar(){
+        $("#favouriteStar").css("color","yellow");
+    }
+    function addToFavorite(){
+        // get the current jason obect ,then add to the favorite table
+        var json = curr_stock_json;
+        var content;
+        if(json != null){
+            alert(json);
+            // add to the favorite table
+            ChangeStar();
+            // create row
+            content = "<tr>";
+            content + = "<td>" + json.Symbol + "</td>";
+            content + = "<td>" + json.Name + "</td>";
+            content + = "<td>" + json.LastPrice + "</td>";
+            var change = json.Change.toFixed(2);
+            var changePercent = json.ChangePercent.toFixed(2);
+            content + = "<td>" + json.Symbol + "</td>";
+            content += "<td>"+change+" ( "+changePercent +"%"+" ) "+"</td>";
+            var marketCap = json["MarketCap"]/1000000000;
+            content += "<td>"+marketCap.toFixed(2)+" Billion"+"</td>";
+            // create delete button 
+            var trashButton = "<button type=\"button\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-trash\"></span></button>";
+            content += "<td>"+trashButton+"</td>"; 
+            content += "</tr>";
+            $("#favoriteTable").append(content);
+        }
+        
+    }
+</script>
+<!--quote section-->    
+<script>
+    //define two global object for call the facebook API
+    // one global for recore currend jason object one for 
+    // one for the picuture UIL
+    var curr_stock_json;
+    var curr_json_imgURL;
+    
     /*function clickToQuote(myform){
         var textVal = myform.inputText.value;//get the symbol.
         // first to check the input
@@ -194,6 +293,7 @@
     $("#quoteButton").click(function(e) {
       e.preventDefault();
       var symbol = $("#stockInput").val();
+
     // get the detail 
       $.ajax({
           url: "hw8Stock.php",
@@ -206,7 +306,8 @@
                 alert("Error!");
                 return;
             }
-               var jsonObject = jQuery.parseJSON(result); 
+               var jsonObject = jQuery.parseJSON(result);
+               curr_stock_json= jsonObject;// for generate facebook feed;
                            /* if(jsonObject["Message"] == "No symbol matches found for AAPLE. Try another symbol such as MSFT or AAPL, or use the Lookup API.") {
                                 // below should be do something when type aaple no symobl
                                 alert("no object");
@@ -217,6 +318,7 @@
                                 if(jsonObject["Status"]=="SUCCESS"){
                                     // we need to create a table use JQUERY
                                     //$("stockDetailTable").append("<table id=\"detailTable\" class=\"table table-striped table-responsive\">")
+                                    $("#stockDetailSection").append("<table class=\"table table-striped table-responsive\" id=\"stockDetailTable\"></table>");
                                     $("#stockDetailTable").append("<tr><td><p>Name</p></td><td>" + jsonObject.Name + "</td></tr>");
                                     $("#stockDetailTable").append("<tr><td><p>Last Price</p></td><td>" + jsonObject.LastPrice + "</td></tr>");
                                     $("#stockDetailTable").append("<tr><td><p>Change (Change Percent)</p></td><td>" + jsonObject.ChangePercent + "</td></tr>");
@@ -231,7 +333,8 @@
                                    //$("stockDetailTable").append("</table>");
                                     var stockImgURL = "http://chart.finance.yahoo.com/t?s=" + jsonObject["Symbol"]+ "&lang=en-US&width=550&height=450";
                                    $("#stockChart").append("<img id=\"dailyStockChart\" class=\"img-responsive\" src=\"" + stockImgURL + "\" alt=\"daily stock chart\">");
-          
+                                    // prepare the curr URL for facebook;
+                                   curr_json_imgURL = "http://chart.finance.yahoo.com/t?s=" + jsonObj["Symbol"]+ "&lang=en-US&width=250&height=250";
                                    }
                              }
         });
