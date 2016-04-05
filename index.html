@@ -429,6 +429,9 @@
                 return;
             }
                var jsonObject = jQuery.parseJSON(result);
+               // update the star after load;
+               updateStarSpan(jsonObject.Symbol);
+               
                curr_stock_json= jsonObject;// for generate facebook feed;
                            /* if(jsonObject["Message"] == "No symbol matches found for AAPLE. Try another symbol such as MSFT or AAPL, or use the Lookup API.") {
                                 // below should be do something when type aaple no symobl
