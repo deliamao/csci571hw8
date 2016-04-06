@@ -129,8 +129,8 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                           <label>Favorite List:</label>
-                           <div class="pull-right">
-                            Automatic Refresh:<input id="autoRefreshButton" type="checkbox" data-toggle="toggle">
+                           <div class="pull-right"><span class = "hidden-xs">
+                            Automatic Refresh:</span><input id="autoRefreshButton" type="checkbox" data-toggle="toggle">
                             <button type="submit" id="refreshButton" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span></button>
                             <!--below need to modify-->
                             <button type="submit" id="nextSlide" class="btn btn-default" href="#myCarousel" data-slide="next" disabled><span class="glyphicon glyphicon-chevron-right"></span></button>
@@ -162,9 +162,9 @@
                             <!--below is the navigation section--oh my god, so complicated555>-->
                             <div id= tags>
                             <ul class="nav nav-pills">
-                                 <li class="active"><a data-toggle="pill" href="#currentStock"><span class="glyphicon glyphicon-dashboard"></span>Current Stock</a></li>
-                                 <li><a data-toggle="pill" href="#HistoricalCharts"><span class="glyphicon glyphicon-stats"></span>Historical Charts</a></li>
-                                <li><a data-toggle="pill" href="#newsFeeds"><span class="glyphicon glyphicon-link"></span>News Feeds</a></li>
+                                <li class="active"><a data-toggle="pill" href="#currentStock"><span class="glyphicon glyphicon-dashboard"></span><span class = "visible-xs">Stock</span><span class = "hidden-xs">Current Stock</span></a></li>
+                                 <li><a data-toggle="pill" href="#HistoricalCharts"><span class="glyphicon glyphicon-stats"></span><span class = "visible-xs">Charats</span><span class = "hidden-xs">Historical Charts</span></a></li>
+                                <li><a data-toggle="pill" href="#newsFeeds"><span class="glyphicon glyphicon-link"></span><span class = "visible-xs">News</span><span class = "hidden-xs">News Feeds</span></a></li>
                              </ul>
                              <hr>
                             </div>
@@ -174,15 +174,17 @@
                                     <div id="currentStock" class="tab-pane fade in active">
                                      <!-- below is the desdign for current stock information-->
                                         <div class="row">
-                                            <div class="col-sm-7">
+                                            <div class="col-sm-5">
                                                 <span>Stock Details</span>
                                             </div>
-                                            <div class="col-sm-2 col-sm-offset-3">
+                                            <div class="col-sm-2 pull-right">
                                                 <button id="fbButton" type="button" class="btn btn-primary" onclick="ShowFacebook()">
                                                 </button>
                                                 <button  id="favouriteButton" type="button" class="btn btn-default" >
                                                 <span id="favouriteStar" class="glyphicon glyphicon-star-empty"></span>
                                                 </button>
+                                            </div>
+                                            <div class="col-sm-1">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -327,12 +329,12 @@
      $("#favouriteButton").click(function(e) {
          e.preventDefault();
         if (curr_stock_json == null) {
-        console.log("current stock is null.");
+        //console.log("current stock is null.");
         return;
         }
         // get the current objcet Symbol
         var stockSymbol = curr_stock_json.Symbol; 
-        console.log("stock symbol:" + stockSymbol); 
+       // console.log("stock symbol:" + stockSymbol); 
          // check if the stockSymbol was in localStorage 
          if(localStorage.length == 0 || localStorage.getItem(stockSymbol) === null){
              // the current symbol not in favorite list, we need add it;
@@ -349,24 +351,24 @@
      });
     // change the star color
     function updateStarSpan(Symbol){
-      console.log("updateStarSpan");
+      //console.log("updateStarSpan");
      // console.log(favouriteList);
-      console.log(Symbol);
+      //console.log(Symbol);
       if (localStorage.getItem(Symbol) == null) {
-        console.log("changeStar remove");
+        //console.log("changeStar remove");
         $("#favouriteStar").removeClass("glyphicon glyphicon-star").addClass("glyphicon glyphicon-star-empty");
         $("#favouriteStar").css("color", "black");
       } else {
-        console.log("changeStar add");
+        //console.log("changeStar add");
         $("#favouriteStar").removeClass("glyphicon glyphicon-star-empty").addClass("glyphicon glyphicon-star");
         $("#favouriteStar").css("color", "yellow");
       }
     }
     
     function deleteClick(Symbol){
-         console.log("in storage && deleted");
+         //console.log("in storage && deleted");
          
-         console.log("in storage && deleted");
+         //console.log("in storage && deleted");
          $("#"+Symbol).remove();
          localStorage.removeItem(Symbol);
          updateStarSpan(Symbol);
@@ -388,7 +390,7 @@
                   datatype: "json",
                   success: function(result) {
                   var jsonObject = jQuery.parseJSON(result);
-                      console.log("just update favor row");
+                     // console.log("just update favor row");
                       
                      // generateFavoriteRow(jsonObject); generate the result is not right we need to update some will be enough
                                             //update row
@@ -412,23 +414,23 @@
     //handle the refreshButton problem
      $("#refreshButton").click(function(e) {
       //$("#favoriteTable").empty();
-      console.log("refreshButton click.");
+     // console.log("refreshButton click.");
       refreshFavoritePannel();
     });
    
     
     // handle autoRefreshButton
     $("#autoRefreshButton").change(function() {
-      console.log("autoRefreshButton");
-      console.log($("#autoRefreshButton").prop('checked'));
+      //console.log("autoRefreshButton");
+      //console.log($("#autoRefreshButton").prop('checked'));
       if ($("#autoRefreshButton").prop('checked')) {
-        console.log("autorefesh favourite pannel on. set to 5s");
+        //console.log("autorefesh favourite pannel on. set to 5s");
         autoRefreshFavouriteId = setInterval(function() {
-            console.log("autorefesh favourite pannel on. set to 5s");
+            //console.log("autorefesh favourite pannel on. set to 5s");
             refreshFavoritePannel();
             }, 5000);
       } else {
-        console.log("autorefesh favourite pannel off.");
+        //console.log("autorefesh favourite pannel off.");
         clearInterval(autoRefreshFavouriteId);
       }
     });
@@ -437,13 +439,13 @@
     
     
     function deleteFavouriteRow(deleteButton, stockSymbol) {
-      console.log("deleteFavouriteRow");
+      //console.log("deleteFavouriteRow");
       if (typeof(deleteButton) == "object") {
         $(deleteButton).closest("tr").remove();
         localStorage.removeItem(stockSymbol);
          updateStarSpan(stockSymbol);
       }
-      console.log(favouriteList);
+      //console.log(favouriteList);
     }
 
 </script>
@@ -557,11 +559,13 @@
                                   // curr_json_imgURL = "http://chart.finance.yahoo.com/t?s=" + jsonObj["Symbol"]+ "&lang=en-US&width=250&height=250";
                                     
                                     $.ajax({
-                    url: "index.php",
-                 data: { bingVal : symbol },
-                 type: "GET",
-                 datatype: "json",
-                 success: function(result) {
+                                url: "index.php",
+                               data: { bingVal : symbol },
+                            type: "GET",
+                          datatype: "json",
+                         success: function(result) {
+                             //console.log("this is " + symbol);
+                           //alert(result);
                      //alert(result);
                   var jsonObject = jQuery.parseJSON(result);
                      //alert(jsonObject);
@@ -569,7 +573,7 @@
                    //newsDisplay(jsonObject);
                     // create the feed data
                      // the count of the news
-                     console.log("feed test" + symbol);
+                     //console.log("feed test" + symbol);
                      
                      var newsCount = jsonObject.d.results.length;
                      for(var i=0; i<newsCount; i++){
