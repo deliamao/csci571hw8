@@ -5,6 +5,14 @@
 #body {
 	background-color: rgb(0, 102, 153);
  }
+    
+    #fbButton{
+         background-image: url(fbimg.png);
+         background-size: 100% 100%;
+         background-repeat: no-repeat;
+         width: 40px;
+         height: 35px;
+    }
   
 #formFistSection {
 	background-color: white;
@@ -60,7 +68,7 @@
 <script>
   window.fbAsyncInit = function() {
     FB.init({
-      appId      : '1172049346141188',// application ID 
+      appId      : '1579905572322363',// application ID 
       xfbml      : true,
       version    : 'v2.5'
     });
@@ -80,7 +88,7 @@
 <div class="container">
     <!-- the form div-->   
     <div id="formFistSection">
-       <form class="form-horizontal" role="form" action= "" method="GET">
+       <form class="form-horizontal" role="form" action= "" method="GET" name="myform">
             <h1 id="formH1">Stock Market Search</h1>
          <div class = "row">
             
@@ -170,7 +178,7 @@
                                                 <span>Stock Details</span>
                                             </div>
                                             <div class="col-sm-2 col-sm-offset-3">
-                                                <button id="fbButton" type="button" class="btn btn-primary" onclick="ShowFacebook()">FaceBook
+                                                <button id="fbButton" type="button" class="btn btn-primary" onclick="ShowFacebook()">
                                                 </button>
                                                 <button  id="favouriteButton" type="button" class="btn btn-default" >
                                                 <span id="favouriteStar" class="glyphicon glyphicon-star-empty"></span>
@@ -719,14 +727,24 @@
                 // create the chart
                 $('#HistoricalCharts').highcharts('StockChart', {
                     //
-                   //set up the chart width 
+                   //set up the chart width
+                   
                   chart: {
                    
                    width: 800
                    
                   },
+                    
+                      navigation:{
+                        buttonOptions:{
+                            enabled:false
+                        }
+                    },
                     rangeSelector: {
                         selected: 0,
+                        inputEnabled:false,
+                        allButtonsEnabled: true,
+                        
                         buttons: [{
                             type: 'week',
                             count: 1,
@@ -779,7 +797,11 @@
                         data: ohlc,
                         dataGrouping: {
                             units: groupingUnits
-                        }
+                        }, 
+                        tooltip:{
+                            valueDecimals:2,
+                            valuePrefix:"$"
+                        },
                     }],
                     credits: {
                         enabled:false
@@ -793,7 +815,18 @@
 <!-- clear function-->
 <script>
     function clearResult(){
-            document.location.href = "index.html";
+           /*
+            document.location.href = "index.html";*/
+        document.getElementById("validationInformation").innerHTML = " ";
+        document.myform.inputText.value="";
+        
+        $("#myCarousel").carousel(0);
+        $("#stockDetailSection").empty();
+        $("#stockChart").empty();
+        //$(".well").remove();
+        $("#newsFeeds").empty();
+        //$("#newsFeeds").empty();
+        $('#HistoricalCharts').empty();
             $("#nextSlide").prop('disabled', true);
             
     }
