@@ -26,13 +26,16 @@ header("Access-Control-Allow-Origin: *");
         echo $mjson;
 	  }
 
-       if (isset($_GET['bingVal'])) {
+       if (isset($_GET["bingVal"])) {
         // this is use the API document to get the jason by php
         // stream_context_create create a stream to include all the option parameter then will be 
         // used in file_get_contents
         $accountKey = "HhVd7fTsisZ+g0BR90ix/xD+Xb/gcFj+Duw5aRimTqc";
-        $WebSearchURL =  "https://api.datamarket.azure.com/Bing/Search/v1/News?Query=%27". $GET["bingVal"] . "%27&\$format=json";
-       // $WebSearchURL =  "https://api.datamarket.azure.com/Bing/Search/v1/News?     Query=%27AAPL%27&\$format=json";
+        
+        $WebSearchURL =  "https://api.datamarket.azure.com/Bing/Search/v1/News?Query=%27". $_GET["bingVal"] . "%27&\$format=json";  
+        
+        //$WebSearchURL =  "https://api.datamarket.azure.com/Bing/Search/v1/News?Query=%27". $GET["bingVal"] . "%27&\$format=json";
+    
        $context = stream_context_create(array(
             'http' => array(
                 'request_fulluri' => true,
@@ -43,9 +46,9 @@ header("Access-Control-Allow-Origin: *");
         $mjson = file_get_contents($WebSearchURL, 0, $context);
         
         echo $mjson;
+           
+        
    }
 
 ?>
-
-
 
