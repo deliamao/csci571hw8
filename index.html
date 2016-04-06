@@ -88,7 +88,7 @@
 <div class="container">
     <!-- the form div-->   
     <div id="formFistSection">
-       <form class="form-horizontal" role="form" action= "" method="GET" name="myform">
+       <form id="searchForm" class="form-horizontal" role="form" name="myform" action= "" method="GET" >
             <h1 id="formH1">Stock Market Search</h1>
          <div class = "row">
             
@@ -101,7 +101,7 @@
             </div>
             
             <div class="col-sm-5">
-                <button type="button"  class="btn btn-primary" id= "quoteButton"><span class="glyphicon glyphicon-search"></span>Get Quote </button>
+                <button type="submit"  class="btn btn-primary" id= "quoteButton"><span class="glyphicon glyphicon-search"></span>Get Quote </button>
                 <button type="button" class="btn btn-default" onclick ="clearResult()"><span class=" glyphicon glyphicon-refresh"></span>Clear</button>
             </div>
             
@@ -326,7 +326,7 @@
 <!--below section is to handle the favorite problem-->
 <script>
     // the the add favor button was click then trigger 
-     $("#favouriteButton").click(function(e) {
+     $("#searchForm").submit(function(e) {
          e.preventDefault();
         if (curr_stock_json == null) {
         //console.log("current stock is null.");
