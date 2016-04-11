@@ -88,7 +88,7 @@
 <div class="container">
     <!-- the form div-->   
     <div id="formFistSection">
-       <form id="searchForm" class="form-horizontal" role="form" name="myform" action= "" method="GET" >
+       <form id="searchForm" class="form-horizontal" role="form" name="myform" action= "" method="GET" name="myform" >
             <h1 id="formH1">Stock Market Search</h1>
          <div class = "row">
             
@@ -97,7 +97,7 @@
             </div>
             
             <div class="col-sm-4">
-             <input type="text" class="form-control"  name="inputText" placeholder="Apple Inc or AAPL" id="stockInput" required>
+             <input type="text" class="form-control"  name="inputText" placeholder="Apple Inc or AAPL" id="stockInput" required><br class = "visible-xs">
             </div>
             
             <div class="col-sm-5">
@@ -137,7 +137,7 @@
                           </div>
                     </div>
                     <div class="panel-body">
-                                     <table id="favoriteTable" class="table table-striped">
+                                     <table id="favoriteTable" class="table table-striped table-responsive">
                                         <tr>
                                             <th>Symbol</th>
                                             <th>Company Name</th>
@@ -326,7 +326,7 @@
 <!--below section is to handle the favorite problem-->
 <script>
     // the the add favor button was click then trigger 
-     $("#searchForm").submit(function(e) {
+     $("#favouriteButton").click(function(e) {
          e.preventDefault();
         if (curr_stock_json == null) {
         //console.log("current stock is null.");
@@ -470,7 +470,7 @@
             datatype: "json",
             success: function( result ) {
                 alert(result);*/
-    $("#quoteButton").click(function(e) {
+    $("#searchForm").submit(function(e) {
        
        e.preventDefault();
        var symbol = $("#stockInput").val();
