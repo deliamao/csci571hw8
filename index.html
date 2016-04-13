@@ -5,7 +5,7 @@
 #body {
 	background-color: rgb(0, 102, 153);
  }
-    
+
     #fbButton{
          background-image: url(fbimg.png);
          background-size: 100% 100%;
@@ -13,7 +13,11 @@
          width: 40px;
          height: 35px;
     }
-  
+    .detailHeader{
+        text-align: center;
+        font-weight: bold;
+        
+    } 
 #formFistSection {
 	background-color: white;
 	border-radius: 5px;
@@ -21,8 +25,20 @@
 	padding-right: 20px;
 	padding-bottom: 30px;
 }
+    .secContainer{
+    background-color: white;
+	border-radius: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 30px;
+    padding-top:10px;
+        
+    }
+.StockDetails{
+         text-align: center;
+    }
     
-#formH1 {
+.formH1 {
                 text-align: center;
                 font-style: Arial;
                 font-size: 25px;
@@ -55,8 +71,8 @@
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <!-- Latest compiled JavaScript -->
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
- <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-        <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+  <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
    
     
 
@@ -89,35 +105,37 @@
     <!-- the form div-->   
     <div id="formFistSection">
        <form id="searchForm" class="form-horizontal" role="form" name="myform" action= "" method="GET" name="myform" >
-            <h1 id="formH1">Stock Market Search</h1>
+            <h1 class="formH1">Stock Market Search</h1>
          <div class = "row">
             
             <div class="col-sm-3">
             <label class="control-label" for="stockInput">Enter the stock name or symbol:<span style="color:red">*</span></label>
             </div>
-            
+            <br class = "visible-xs">
             <div class="col-sm-4">
              <input type="text" class="form-control"  name="inputText" placeholder="Apple Inc or AAPL" id="stockInput" required><br class = "visible-xs">
             </div>
             
             <div class="col-sm-5">
                 <button type="submit"  class="btn btn-primary" id= "quoteButton"><span class="glyphicon glyphicon-search"></span>Get Quote </button>
-                <button type="button" class="btn btn-default" onclick ="clearResult()"><span class=" glyphicon glyphicon-refresh"></span>Clear</button>
+                <button type="button" class="btn btn-default" onclick ="clearResult()"><span class=" glyphicon glyphicon-refresh"></span>Clear</button> <br>
             </div>
             
+         <br class = "visible-xs">   
         </div>
          <!-- second row include validatinformation plus Markit on Demand logo-->  
         <div class = "row">
             <!-- this will be set for output validation information, first is null-->
             <div class="col-sm-4 col-sm-offset-3" id="validationInformation"></div>
             <div class="col-sm-5">
-                <label for="logo">Powered by:</label><a id="logoLink" href="http://dev.markitondemand.com/MODApis/"><img id="logoImage" alt="Markit on Demand logo" src="mod-logo.png" ></a>
+                <label for="logo">Powered by:</label><a id="logoLink" target="_blank" href="http://dev.markitondemand.com/MODApis/"><img id="logoImage" alt="Markit on Demand logo" src="mod-logo.png" ></a>
             </div>
         </div><!--for row-->  
      </form>
     </div> <!--upper part-->
     <hr id="lineHR">
     <!-- below is the second part of first figure, result show in carousel still need to figure out how to solve this part--> 
+    <div class="secContainer">
     <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
         <!--thecarousel need id , class, data ride -->
         
@@ -130,13 +148,14 @@
                     <div class="panel-heading">
                           <label>Favorite List:</label>
                            <div class="pull-right"><span class = "hidden-xs">
-                            Automatic Refresh:</span><input id="autoRefreshButton" type="checkbox" data-toggle="toggle">
-                            <button type="submit" id="refreshButton" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span></button>
+                               Automatic Refresh:</span><span data-toggle="tooltip" data-placement="bottom" title="Auto Refresh "><input id="autoRefreshButton" type="checkbox" data-toggle="toggle"></span>
+                            <button type="submit" id="refreshButton" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Refresh button" ><span class="glyphicon glyphicon-refresh"></span></button>
                             <!--below need to modify-->
-                            <button type="submit" id="nextSlide" class="btn btn-default" href="#myCarousel" data-slide="next" disabled><span class="glyphicon glyphicon-chevron-right"></span></button>
+                               <button type="submit" id="nextSlide" class="btn btn-default" href="#myCarousel" data-slide="next" data-toggle="tooltip" data-placement="bottom" title="show Stock information" disabled ="true"><span class="glyphicon glyphicon-chevron-right"></span></button>
                           </div>
                     </div>
                     <div class="panel-body">
+                                    <div  class="table-responsive">
                                      <table id="favoriteTable" class="table table-striped table-responsive">
                                         <tr>
                                             <th>Symbol</th>
@@ -147,6 +166,7 @@
                                             <th>      </th>
                                         </tr>
                                     </table>
+                        </div> 
                     </div>
                 </div>
             </div><!--end of favorite section-->
@@ -154,10 +174,15 @@
                 <div class ="item"><!--second slide section-->
                     <div class="panel panel-default" id="sectionTwo">
                         <div class="panel-heading">
+                     
                     <!-- stock detail panel heading include left button and stock detail text-->
-                          <button type="submit" class="btn btn-default" href="#myCarousel" data-slide="prev" onclick()="refreshFavoritePannel()"><span class="glyphicon glyphicon-chevron-left"></span></button> 
-                         <span>Stock Details</span>
+                      
+                          <button type="submit" class="btn btn-default" href="#myCarousel" data-slide="prev" onclick()="refreshFavoritePannel()"><span class="glyphicon glyphicon-chevron-left"></span></button> <strong>Stock Details</strong>
                         </div>
+                             
+                   
+                        </div>
+                        
                         <div class="panel-body">
                             <!--below is the navigation section--oh my god, so complicated555>-->
                             <div id= tags>
@@ -174,17 +199,16 @@
                                     <div id="currentStock" class="tab-pane fade in active">
                                      <!-- below is the desdign for current stock information-->
                                         <div class="row">
-                                            <div class="col-sm-5">
-                                                <span>Stock Details</span>
-                                            </div>
-                                            <div class="col-sm-2 pull-right">
+                                            <div class="col-sm-12">
+                                                <span><strong>Stock Details</strong></span>
+                                            <div class="pull-right">
                                                 <button id="fbButton" type="button" class="btn btn-primary" onclick="ShowFacebook()">
                                                 </button>
                                                 <button  id="favouriteButton" type="button" class="btn btn-default" >
                                                 <span id="favouriteStar" class="glyphicon glyphicon-star-empty"></span>
                                                 </button>
                                             </div>
-                                            <div class="col-sm-1">
+                                           
                                             </div>
                                         </div>
                                         <div class="row">
@@ -221,12 +245,16 @@
                     </div>
                 </div>
         
+        
         </div><!-- end of carousel-inner - all- slide section-->
-    
-    </div> <!-- end of carousel>
-
+        
+    </div> 
+  </div><!--secContainer-->
 </div> <!--the whole include the upper part and the second part-->
-    
+  
+        
+        
+        
 <!---All the script will be write down in below-->
 
 <script>
@@ -236,7 +264,7 @@
     //var curr_stock_json;
    // var curr_json_imgURL;
         var json = curr_stock_json;
-        var stockImg = "http://chart.finance.yahoo.com/t?s="+json["Symbol"];
+        var stockImg = "http://chart.finance.yahoo.com/t?s="+json["Symbol"]+"&lang=en-US&width=300&height=300";
         var title = "Current Stock Price of "+ json["Name"]+ " is $" + json["LastPrice"];
         var subhead = "Stock Information of "+json["Name"]+ " ("+json["Symbol"]+")";
         var footText ="LAST PRICE: $"+json["LastPrice"]+", CHANGE: "+json["Change"].toFixed(2)+" ("+json["ChangePercent"].toFixed(2)+"%)";
@@ -281,8 +309,10 @@
                           favorRow += "<td id=\"favorSymbol" +jsonObject.Symbol +"\">"+change+" ( "+changePercent +"%"+" ) "+showArrow(changePercent)+"</td>";
                           
                           // change 
-                          changeTextColor(changePercent, "favorSymbol"+jsonObject.Symbol);
-                          
+                          var para = "favorSymbol"+jsonObject.Symbol;
+                          console.log("this is para" + para);
+                          changeTextColor(changePercent, para);
+                          refreshFavoritePannel();
                           
                           favorRow += "<td>" + (jsonObject.MarketCap/1000000000).toFixed(2) + " Billion</td>"
                          var trashButton = "<button type=\"button\" class=\"btn btn-default\" onclick=\"deleteFavouriteRow(this, \'"+jsonObject .Symbol + "\');\"><span class=\"glyphicon glyphicon-trash\"></span></button>";
@@ -297,6 +327,7 @@
 <!-- below is the local store object need　to load the the favordate data store in brower-->
 <script>
  $( document ).ready(function(){
+      
      if((localStorage.length) != 0){
          for(var i= 0; i < localStorage.length; i++){
              // need to get symbol back
@@ -318,9 +349,17 @@
              
          }
      }
+     
+    
  });
     
     
+</script>
+    
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});
 </script>
     
 <!--below section is to handle the favorite problem-->
@@ -390,7 +429,7 @@
                   datatype: "json",
                   success: function(result) {
                   var jsonObject = jQuery.parseJSON(result);
-                     // console.log("just update favor row");
+                    // console.log("just update favor row");
                       
                      // generateFavoriteRow(jsonObject); generate the result is not right we need to update some will be enough
                                             //update row
@@ -400,10 +439,11 @@
                         var change = jsonObject.Change.toFixed(2);
                         var changePercent = jsonObject.ChangePercent.toFixed(2);
                         $("#"+jsonObject.Symbol).find("td:eq(3)").html(change+" ( "+changePercent +"%"+" ) "+showArrow(changePercent));
-                        changeTextColor(changePercent,"favorSymbol"+jsonObject.Symbol);
+                        var para = "favorSymbol"+jsonObject.Symbol;
+                        changeTextColor(changePercent,para);
                                         
-                                        var marketCap = jsonObject["MarketCap"]/1000000000;
-                                        $("#"+jsonObject.Symbol).find("td:eq(4)").html(marketCap.toFixed(2)+" Billion");
+                                       // var marketCap = jsonObject["MarketCap"]/1000000000;
+                                        //$("#"+jsonObject.Symbol).find("td:eq(4)").html(marketCap.toFixed(2)+" Billion");
                 }
              });
              
@@ -421,7 +461,7 @@
     
     // handle autoRefreshButton
     $("#autoRefreshButton").change(function() {
-      //console.log("autoRefreshButton");
+     console.log("autoRefreshButton");
       //console.log($("#autoRefreshButton").prop('checked'));
       if ($("#autoRefreshButton").prop('checked')) {
         //console.log("autorefesh favourite pannel on. set to 5s");
@@ -495,8 +535,10 @@
           datatype: "json",
           success: function(result) {
           var jsonObject = jQuery.parseJSON(result);
-          if(jsonObject["Message"]=="No symbol matches found for AAPLE. Try another symbol such as MSFT or AAPL, or use the Lookup API."){
+          if(jsonObject["Message"]=="No symbol matches found for "+symbol+". Try another symbol such as MSFT or AAPL, or use the Lookup API."){
                 document.getElementById("validationInformation").innerHTML = "Select a valid entry";
+                $("#nextSlide").prop('disabled', true);
+                console.log("this is not valid");
                 return;
                 
             }
@@ -522,34 +564,34 @@
                                     // we need to create a table use JQUERY
                                     //$("stockDetailTable").append("<table id=\"detailTable\" class=\"table table-striped table-responsive\">")
                                     $("#stockDetailSection").append("<table class=\"table table-striped table-responsive\" id=\"stockDetailTable\"></table>");
-                                    $("#stockDetailTable").append("<tr><td><p>Name</p></td><td>" + jsonObject.Name + "</td></tr>");
-                                    $("#stockDetailTable").append("<tr><td><p>Symbol</p></td><td>" + jsonObject.Symbol + "</td></tr>");
-                                    $("#stockDetailTable").append("<tr><td><p>Last Price</p></td><td>" +"$ " + jsonObject.LastPrice + "</td></tr>");
+                                    $("#stockDetailTable").append("<tr><td><p><strong>Name</strong></p></td><td>" + jsonObject.Name + "</td></tr>");
+                                    $("#stockDetailTable").append("<tr><td><p><strong>Symbol</strong></p></td><td>" + jsonObject.Symbol + "</td></tr>");
+                                    $("#stockDetailTable").append("<tr><td><p><strong>Last Price</strong></p></td><td>" +"$ " + jsonObject.LastPrice + "</td></tr>");
                                     // handle the change problem 
                                     var change = jsonObject["Change"].toFixed(2);
                                     var changePercent = jsonObject["ChangePercent"].toFixed(2);
 
-                                    $("#stockDetailTable").append("<tr><td><p>Change (Change Percent)</p></td><td id=\"stock_details_changeTextColor\">" + change+" ( "+changePercent +"%"+" ) "+ showArrow(changePercent)+"</td></tr>");
+                                    $("#stockDetailTable").append("<tr><td><p><strong>Change (Change Percent)</strong></p></td><td id=\"stock_details_changeTextColor\">" + change+" ( "+changePercent +"%"+" ) "+ showArrow(changePercent)+"</td></tr>");
                                     // still need to handle the color of the text
                                     changeTextColor(changePercent, "stock_details_changeTextColor");
                                     
                                     // handle time format problem 
-                                    var time = moment(jsonObject["Timestamp"]).format("DD MMM YYYY, HH:mm:ss A");
-                                    $("#stockDetailTable").append("<tr><td><p>Time and Date</p></td><td>" + time + "</td></tr>");
+                                    var time = moment(jsonObject["Timestamp"]).format("DD MMM YYYY, HH:mm:ss a");
+                                    $("#stockDetailTable").append("<tr><td><p><strong>Time and Date</strong></p></td><td>" + time + "</td></tr>");
                                     
                                     
-                                    $("#stockDetailTable").append("<tr><td><p>Market Cap</p></td><td>" + (jsonObject.MarketCap/1000000000).toFixed(2) + "Billion</td></tr>");
-                                    $("#stockDetailTable").append("<tr><td><p>Volume</p></td><td>" + jsonObject.Volume + "</td></tr>");
+                                    $("#stockDetailTable").append("<tr><td><p><strong>Market Cap</strong></p></td><td>" + (jsonObject.MarketCap/1000000000).toFixed(2) + "Billion</td></tr>");
+                                    $("#stockDetailTable").append("<tr><td><p><strong>Volume</strong></p></td><td>" + jsonObject.Volume + "</td></tr>");
                                      var changeYTD = jsonObject["ChangeYTD"].toFixed(2);
                                  var changePercentYTD =jsonObject["ChangePercentYTD"].toFixed(2);
 
-                                    $("#stockDetailTable").append("<tr><td><p>Change YTD (Change Percent YTD)</p></td><td id =\"stock_details_changeYTDTextColor\">" + changeYTD+" ( "+changePercentYTD +"%"+" ) "+showArrow(changePercentYTD) + "</td></tr>");
+                                    $("#stockDetailTable").append("<tr><td><p><strong>Change YTD (Change Percent YTD)</strong></p></td><td id =\"stock_details_changeYTDTextColor\">" + changeYTD+" ( "+changePercentYTD +"%"+" ) "+showArrow(changePercentYTD) + "</td></tr>");
                                     
-                            changeTextColor(changePercent, "sstock_details_changeYTDTextColor");
+                            changeTextColor(changePercentYTD, "stock_details_changeYTDTextColor");
                                     
-                                   $("#stockDetailTable").append("<tr><td><p>Low Price</p></td><td>" + "$ "+jsonObject.High + "</td></tr>");
-                                  $("#stockDetailTable").append("<tr><td><p>High Price</p></td><td>" +"$ "+ jsonObject.Low + "</td></tr>");
-                                   $("#stockDetailTable").append("<tr><td><p>Opening Price</p></td><td>" +"$ "+ jsonObject.Open + "</td></tr>");
+                                   $("#stockDetailTable").append("<tr><td><p><strong>Low Price</strong></p></td><td>" + "$ "+jsonObject.High + "</td></tr>");
+                                  $("#stockDetailTable").append("<tr><td><p><strong>High Price</strong></p></td><td>" +"$ "+ jsonObject.Low + "</td></tr>");
+                                   $("#stockDetailTable").append("<tr><td><p><strong>Opening Price</strong></p></td><td>" +"$ "+ jsonObject.Open + "</td></tr>");
                                     //below handle chart part
                                    //$("stockDetailTable").append("</table>");
                                     var stockImgURL = "http://chart.finance.yahoo.com/t?s=" + jsonObject["Symbol"]+ "&lang=en-US&width=550&height=450";
@@ -582,9 +624,9 @@
                          newsContent += "<p class=\"newsTitle\"><a href=\"" + singleNews.Url + "\" target=\"_blank\" >" + singleNews.Title + "</a></p>";
                          newsContent += "<p class=\"newsContent\">" + singleNews.Description + "</p>";
                           //console.log("newsURL"+singleNews.Description);
-                          newsContent += "<p class=\"newsPublisher\">" +"Publisher: "+ singleNews.Source + "</p>";
+                          newsContent += "<p class=\"newsPublisher\"><b>" +"Publisher: "+ singleNews.Source + "</b></p>";
                           var date = moment(singleNews.Date).format("DD MMM YYYY HH:mm:ss");
-                          newsContent += "<p class=\"newsDate\">" + "Date: "+date + "</p>";
+                          newsContent += "<p class=\"newsDate\"><b>" + "Date: "+date + "</b></p>";
                           newsContent += "</div>";
                           //$("#newsFeeds").empty();
                           $("#newsFeeds").append(newsContent);
@@ -605,6 +647,11 @@
           }
         
      });
+                                   }else{
+                                       document.getElementById("validationInformation").innerHTML = "Select a valid entry";
+                $("#nextSlide").prop('disabled', true);
+                console.log("this is not valid");
+                                       
                                    }
           }                 }
         });
@@ -719,7 +766,7 @@
                 // split the data set into ohlc and volume
                 // used in serail ohlc
                 var ohlc = _getOHLC(data);
-                var symbol = data.Elements[0]["Symbol"];
+                var symbol = data.Elements[0].Symbol;
                 // set the allowed units for data grouping
                 var groupingUnits = [[
                     'week',                         // unit name
@@ -735,7 +782,7 @@
                    
                   chart: {
                    
-                   width: 800
+                   width: 900
                    
                   },
                     
@@ -852,6 +899,7 @@
                             
                             if(jsonObject.length==0) {
                                document.getElementById("validationInformation").innerHTML = "Select a valid entry";
+                                $("#nextSlide").prop('disabled', true);
                                // $("#validationInformation").innerHTML = "Select a valid entry";
                                 response(null);
 
